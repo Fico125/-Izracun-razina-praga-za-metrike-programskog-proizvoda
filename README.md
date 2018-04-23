@@ -65,3 +65,16 @@ Specifikacija zahtjeva komentari
 
 - zahtjevi sustava -> isprogramirat da ulazni podaci budu samo arff i csv a ako ne neka javi grešku
 - napravit logističku regresiju prema slici (Prezentacija gdje su zadane teme projekta) 
+
+
+23.4.2018
+
+- zahtjevima pridodjelimo nekakav ID da bude jednistven svaki zahtjev
+- matrica praćenja zahtjeva u dizajnu treba povezati sa zahtjevima
+- kada se prvi put spominje neka kratica treba ju objasnit (spec zahtjeva VARL)
+- trening modela testing modela i tek onda racunanje parametra za roc i tek onda crtanje
+- cross validation - podjela na slojeve 
+- u logističku regresiju saljemo metriku po metriku 
+- podatke gledamo po stupcima 
+- mogli bismo imati usporedbu korisnikovih thresholda sa nekim t. iz
+	industrije ili open source-a te bi ga mogli odna smjestitim u neku "grupu".
