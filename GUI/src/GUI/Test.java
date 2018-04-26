@@ -1,6 +1,9 @@
 package GUI;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import weka.core.Instances;
 
@@ -10,17 +13,18 @@ public class Test {
 		// TODO Auto-generated method stub
 		Aplet aplet = new Aplet();
 		JFrame myFrame = new JFrame("Test");
-		myFrame.add(aplet);
+	
+		myFrame.getContentPane().add(aplet);
 		myFrame.pack();
 		myFrame.setVisible(true);
 		aplet.init();
 		
-		Instances data;
-		do {
-			data = Input.getData();
-			}
-		while(data == null);
-		
+		try {
+			CrossValidate.CrossVal();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
