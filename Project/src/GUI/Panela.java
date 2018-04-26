@@ -1,21 +1,25 @@
 package GUI;
 
-import java.awt.Choice;
 import java.awt.GridLayout;
 import java.awt.Panel;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
+import weka.core.Instances;
+
 public class Panela extends Panel {
 	
-	private TextField k,l;
-	private Choice boja;
 	private Ksustav ks;
+	public static String filepath;
+	public static String filename;
+	public Instances data = null;
 	
 	public Panela() {
 		
@@ -28,12 +32,7 @@ public class Panela extends Panel {
 		
 		ucitaj.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent ae) {
-		        JFileChooser fileChooser = new JFileChooser();
-		        int returnValue = fileChooser.showOpenDialog(null);
-		        if (returnValue == JFileChooser.APPROVE_OPTION) {
-		          File selectedFile = fileChooser.getSelectedFile();
-		          System.out.println(selectedFile.getName());
-		        }
+		    	  Input.readFile();
 		      }
 		    });
 		
@@ -53,5 +52,8 @@ public class Panela extends Panel {
 		
 		
 	}
-
 }
+	
+
+	
+	
