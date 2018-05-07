@@ -78,3 +78,15 @@ Specifikacija zahtjeva komentari
 - podatke gledamo po stupcima 
 - mogli bismo imati usporedbu korisnikovih thresholda sa nekim t. iz
 	industrije ili open source-a te bi ga mogli odna smjestitim u neku "grupu".
+	
+	
+---------------------------------------------------------------------------------------
+7.5.18
+
+za svaku metriku 1 koeficijent i slobodni clan. b0, b1, b2, b3, b4,... i slobodni clan, treba vidjeti koji je slobodni clan.
+p[0] koliko ima nula, p[1] koliko ima 1, tested negative i tested positive
+
+-> slati za svaku metriku da dobijemo samo 2 bete. za svaku metriku posebno b0 i b1
+-> provjeriti opet ako postoji metoda za p_val u log reg. (statistički significant.)
+
+
