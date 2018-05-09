@@ -1,5 +1,3 @@
-package GUI;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -40,10 +38,19 @@ public class LogisticRegression {
 
 		Instance predicationDataSet = randData.lastInstance();
 		double value = classifier.classifyInstance(predicationDataSet);
+		
 		/** Prediction Output */
+		System.out.println("Prediction output: ");
 		System.out.println(value);
+		
+		
 		double[][] koef = ((Logistic) classifier).coefficients();
-		System.out.println("koeficijenti" + koef[0][0]);
+		for(int i = 0; i < koef.length; i++)
+		{
+			System.out.println("koeficijent: " + koef[i][0]);
+		}
+		
+		System.out.println("*************************************************************************");
 	}
 
 }
