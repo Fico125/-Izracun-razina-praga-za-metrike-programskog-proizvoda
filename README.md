@@ -89,4 +89,18 @@ p[0] koliko ima nula, p[1] koliko ima 1, tested negative i tested positive
 -> slati za svaku metriku da dobijemo samo 2 bete. za svaku metriku posebno b0 i b1
 -> provjeriti opet ako postoji metoda za p_val u log reg. (statistički significant.)
 
+-------------------------------------------------------------------------------------------------------------------------
+
+15.5.2018.
+
+Projektni plan:
+	->odvojiti malo onaj dio od alata i tehnika, staviti to u komunikaciju
+	->mehanizmi izvješćivanja
+	-> dodati rizike koji se eventualno mogu pronaći
+	
+Dizajn specifikacija:
+	->arhitektura sustava -npr. cloud, pa objasniti prednosti,nedostatke, detaljan opis
+	->matrica praćenja zahtjeva je u obliku id-a i onda s čime je to povezano u spec.zahtjeva, kako je to povezano
+	
+-------------------------------------------------------------------------------------------------------------------------
 
