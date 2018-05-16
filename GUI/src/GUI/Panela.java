@@ -32,7 +32,12 @@ public class Panela extends Panel {
 		
 		ucitaj.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent ae) {
-		    	  Input.readFile();
+		    	  try {
+					Input.readFile();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		      }
 		    });
 		
