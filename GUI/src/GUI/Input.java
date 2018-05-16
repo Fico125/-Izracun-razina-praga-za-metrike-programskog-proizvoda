@@ -18,43 +18,46 @@ public class Input {
 
 	
 	public static void readFile() throws Exception {
+		
 		JFileChooser chooser=new JFileChooser();
-  	  
-  	  chooser.showSaveDialog(null);
+		chooser.showSaveDialog(null);
 
-  	  String filepath = chooser.getSelectedFile().getAbsolutePath();
-  	  String filename = chooser.getSelectedFile().toString();
+  	  	String filepath = chooser.getSelectedFile().getAbsolutePath();
+  	  	String filename = chooser.getSelectedFile().toString();
   	  
-  	  BufferedReader reader = null;
-		try {
-			if(filename.endsWith(".csv")) {
-				filepath = changeCSV_to_ARFF(filepath);
-			}
-			reader = new BufferedReader(
-			          new FileReader(filepath));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+  	  	BufferedReader reader = null;
+  	  	try {
+  	  		
+  	  		if(filename.endsWith(".csv")) 
+  	  		{
+  	  			filepath = changeCSV_to_ARFF(filename);
+  	  		}
+  	  		
+  	  		reader = new BufferedReader(new FileReader(filepath));
+  	  		
+  	  	} catch (FileNotFoundException e) {
+  	  		e.printStackTrace();
+  	  	}
 		
 		try {
 			data = new Instances(reader);
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-  	  try {
+		
+  	  	try {
 			reader.close();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-  	  // setting class attribute
-  	  data.setClassIndex(data.numAttributes() - 1);
+  	  	
+  	  	// setting class attribute
+  	  	data.setClassIndex(data.numAttributes() - 1);
 		//System.out.println(data);
-  	  new_data = FileHandler.numericToNominal(data);
+  	  	new_data = FileHandler.numericToNominal(data);
   	  
   	  
       }
@@ -64,30 +67,31 @@ public class Input {
 		return new_data;
 	}
 	
-	 public static String changeCSV_to_ARFF(String path) throws IOException{
-	        //AKO ZAVRŠAVA NA ARFF IZAĐI
-	        if(path.endsWith(".arff")){
-	            return path;
-	        }
+	public static String changeCSV_to_ARFF(String path) throws IOException{
+		 
+		//AKO ZAVRSAVA NA ARFF IZAÄ�I
+		if(path.endsWith(".arff")){
+		    return path;
+		}
 	            
-	        //OVO JE PRETVARANJE CSV U ARFF
-	        // load CSV
-	        CSVLoader loader = new CSVLoader();
-	        loader.setSource(new File(path));
-	        Instances data = loader.getDataSet();//get instances object
-	        
-	        //promjeni ime stinga u arff
-	        String newPath = path.replace(".csv", ".arff");
-	        
-	        // save ARFF
-	        ArffSaver saver = new ArffSaver();
-	        saver.setInstances(data);//set the dataset we want to convert
-	        //and save as ARFF
-	        saver.setFile(new File(newPath));
-	        saver.writeBatch();
-	        
-	        return newPath;
-	    }
+		//OVO JE PRETVARANJE CSV U ARFF
+		// load CSV
+		CSVLoader loader = new CSVLoader();
+		loader.setSource(new File(path));
+		Instances data = loader.getDataSet();//get instances object
+		
+		//promjeni ime stinga u arff
+		String newPath = path.replace(".csv", ".arff");
+		
+		// save ARFF
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(data);//set the dataset we want to convert
+		//and save as ARFF
+		saver.setFile(new File(newPath));
+		saver.writeBatch();
+		
+		return newPath;
+	}
 	
 }
 
