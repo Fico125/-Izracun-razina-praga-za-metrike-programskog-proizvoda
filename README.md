@@ -94,13 +94,13 @@ p[0] koliko ima nula, p[1] koliko ima 1, tested negative i tested positive
 15.5.2018.
 
 Projektni plan:
-	->odvojiti malo onaj dio od alata i tehnika, staviti to u komunikaciju
-	->mehanizmi izvješćivanja
-	-> dodati rizike koji se eventualno mogu pronaći
+	-odvojiti malo onaj dio od alata i tehnika, staviti to u komunikaciju
+	-mehanizmi izvješćivanja
+	-dodati rizike koji se eventualno mogu pronaći
 	
 Dizajn specifikacija:
-	->arhitektura sustava -npr. cloud, pa objasniti prednosti,nedostatke, detaljan opis
-	->matrica praćenja zahtjeva je u obliku id-a i onda s čime je to povezano u spec.zahtjeva, kako je to povezano
+	-arhitektura sustava -npr. cloud, pa objasniti prednosti,nedostatke, detaljan opis
+	-matrica praćenja zahtjeva je u obliku id-a i onda s čime je to povezano u spec.zahtjeva, kako je to povezano
 	
 -------------------------------------------------------------------------------------------------------------------------
 
