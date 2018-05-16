@@ -58,7 +58,3 @@ public class Panela extends Panel {
 		
 	}
 }
-	
-
-	
-	
