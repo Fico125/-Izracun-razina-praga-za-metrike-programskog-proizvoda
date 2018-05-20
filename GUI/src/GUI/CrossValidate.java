@@ -10,15 +10,38 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 public class CrossValidate {
 	
+	private String resultText = "";
+	private Input input;
+	
 
-	public static void CrossVal() throws Exception{
-		
+	public String getResultText() {
+		return resultText;
+	}
+	
+	public CrossValidate(Input input_) 
+	{
+		input = input_;
+	}
+	
+	public void CrossVal() throws Exception{
+		System.out.println("getting data from the Input object");
 		Instances data;
+		int iCount = 1;
+		if (  input == null ){
+			System.out.println("NULL input data object");
+		} 
 		do {
-			data = Input.getData();
-			}
-		while(data == null);
+			data = input.getData();
+			iCount ++;
+		}
+		//while( (data == null) &&  (iCount < 100 ));
+		while( iCount < 100 );
 		
+		if ( iCount == 100 ) {
+			System.out.println("getting data from the Input object FAILED");
+		}else {
+			System.out.println("data for cross validation read");
+		}
 		
 		//System.out.println(data);
 		
@@ -53,9 +76,16 @@ public class CrossValidate {
 			double correct = eval.pctCorrect();
 			
 			averagecorrect = averagecorrect + correct;
-			System.out.println("the "+n+"th cross validation:"+eval.toSummaryString());
-			LogisticRegression.process(train, test, randData);
+			String intermediateText = "the "+n+"th cross validation:"+eval.toSummaryString();
+			System.out.println(intermediateText);
+			resultText += intermediateText + "\n";
+			LogisticRegression logisticRegressionEngine = new LogisticRegression();
+			logisticRegressionEngine.process(train, test, randData);
+			resultText += logisticRegressionEngine.getOutputText() + "\n";
 		}
-		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
+		String finalText = "the average correction rate of "+fold+" cross validation: "+averagecorrect/fold;
+		System.out.println(finalText);
+		resultText += finalText;
+		
 	}
 }

@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.Component;
+import java.awt.FileDialog;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,24 +9,27 @@ import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 
+import org.eclipse.swt.SWT;
+
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 
 public class Input {
 	
-	private static Instances data;
-	private static Instances new_data;
+	private  Instances data;
+	private  Instances new_data;
 
 	
-	public static void readFile() throws Exception {
+	public  void readFile(String filename, String filepath) throws Exception {
 		
-		JFileChooser chooser=new JFileChooser();
+		/*JFileChooser chooser=new JFileChooser();
 		chooser.showSaveDialog(null);
-
+		
   	  	String filepath = chooser.getSelectedFile().getAbsolutePath();
-  	  	String filename = chooser.getSelectedFile().toString();
-  	  
+  	  	String filename = chooser.getSelectedFile().toString();*/
+		
+  	    
   	  	BufferedReader reader = null;
   	  	try {
   	  		
@@ -32,8 +37,7 @@ public class Input {
   	  		{
   	  			filepath = changeCSV_to_ARFF(filename);
   	  		}
-  	  		
-  	  		reader = new BufferedReader(new FileReader(filepath));
+  	  		reader = new BufferedReader(new FileReader(filepath + "/" + filename));
   	  		
   	  	} catch (FileNotFoundException e) {
   	  		e.printStackTrace();
@@ -63,11 +67,11 @@ public class Input {
       }
 	
 
-	public static Instances getData() {
+	public  Instances getData() {
 		return new_data;
 	}
 	
-	public static String changeCSV_to_ARFF(String path) throws IOException{
+	public  String changeCSV_to_ARFF(String path) throws IOException{
 		 
 		//AKO ZAVRSAVA NA ARFF IZAÄ�I
 		if(path.endsWith(".arff")){
