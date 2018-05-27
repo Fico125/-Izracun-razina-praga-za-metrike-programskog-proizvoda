@@ -76,6 +76,7 @@ public class AppWindow {
 		Input input = new Input();
 		Button ucitaj = new Button(shlZdravapp, SWT.NONE);
 		Button btnDatotekaSpremna = new Button(shlZdravapp, SWT.CHECK);
+		Button btnGenerateROC = new Button(shlZdravapp, SWT.NONE);
 		btnDatotekaSpremna.setFont(SWTResourceManager.getFont(".AppleSystemUIFont", 9, SWT.NORMAL));
 		btnDatotekaSpremna.setBounds(10, 43, 124, 18);
 		btnDatotekaSpremna.setText("Datoteka spremna");
@@ -117,6 +118,10 @@ public class AppWindow {
 		btnClose.setBounds(0, 101, 134, 28);
 		btnClose.setText("Zatvori");
 		
+		btnGenerateROC = new Button(shlZdravapp, SWT.NONE);
+		btnGenerateROC.setBounds(0, 135, 134, 28);
+		btnGenerateROC.setText("Nacrtaj ROC graf");
+		
 		btnClose.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -144,6 +149,21 @@ public class AppWindow {
 			 }
 			}
 			
+		});
+		
+		btnGenerateROC.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(input != null) {
+					GenerateROC plotGraph = new GenerateROC(input);
+					try {
+						plotGraph.DrawRocGraph();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
 		});
 		
 		Composite composite = new Composite(shlZdravapp, SWT.EMBEDDED);
