@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 
 import org.eclipse.swt.SWT;
 
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -24,7 +25,7 @@ public class Input {
 	
 	public  void readFile(String filename, String filepath) throws Exception {
 
-		String fullFilePath = filepath + "\\" + filename;
+		String fullFilePath = filepath + "/" + filename;
 		BufferedReader reader = null;
   	  	try {
   	  		
@@ -54,6 +55,24 @@ public class Input {
   	  		e.printStackTrace();
   	  	}
 		
+  	  int brojZadnjegStupca = data.numAttributes() - 1;
+  	  	for ( int i = 0; i < data.numInstances(); i++) {
+  	  		Instance currentInstance = data.instance(i);
+  	  		int brojBugova = Integer.parseInt( currentInstance.toString(brojZadnjegStupca) );
+  	  		if ( brojBugova != 0 ) {
+  	  			currentInstance.setValue(brojZadnjegStupca, 1.0);
+  	  		}
+  	  	}
+  	  	// ispis broja instanci, odnosno redaka csv datoteke
+  	  	//System.out.println(data.numInstances());
+  	  	// ispis broja atributa,odnosno metrika ilitiga stupaca
+  	  	//System.out.println(data.numAttributes());
+  	  	//Instance currentInstance = data.instance(3);
+  	  	//String value = currentInstance.toString(49);
+  	  	
+  	  	//System.out.println(value);
+  	  	//}
+  	  	
   	  	// setting class attribute
   	  	data.setClassIndex(data.numAttributes() - 1);
 		//System.out.println(data);

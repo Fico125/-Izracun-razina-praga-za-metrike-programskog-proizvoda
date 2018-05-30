@@ -35,7 +35,7 @@ public class CrossValidate {
 			iCount ++;
 		}
 		//while( (data == null) &&  (iCount < 100 ));
-		while( iCount < 100 );
+		while( ( iCount < 100 ) && ( data == null )  );
 		
 		if ( iCount == 100 ) {
 			System.out.println("getting data from the Input object FAILED");
@@ -64,7 +64,7 @@ public class CrossValidate {
 		
 		double averagecorrect = 0;
 		
-		for (int n=0;n<fold;n++)
+		/*for ( int n = 0; n < fold; n++ )
 		{
 			Evaluation eval = new Evaluation(randData);
 			Instances train = randData.trainCV(fold, n);
@@ -82,10 +82,20 @@ public class CrossValidate {
 			LogisticRegression logisticRegressionEngine = new LogisticRegression();
 			logisticRegressionEngine.process(train, test, randData);
 			resultText += logisticRegressionEngine.getOutputText() + "\n";
+		}*/
+		for ( int i = 0; i < fold; i++ )
+		{
+			System.out.println("-------starting " + i + "  cross validation-------");
+			Evaluation eval = new Evaluation(randData);
+			Instances train = randData.trainCV(fold, i);
+			Instances test = randData.testCV(fold, i);
+			
+			LogisticRegression logisticRegressionEngine = new LogisticRegression();
+			logisticRegressionEngine.process(train, test, randData);
+			resultText += logisticRegressionEngine.getOutputText() + "\n";
 		}
 		String finalText = "the average correction rate of "+fold+" cross validation: "+averagecorrect/fold;
 		System.out.println(finalText);
 		resultText += finalText;
-		
 	}
 }

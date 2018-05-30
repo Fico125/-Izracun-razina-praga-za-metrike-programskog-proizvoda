@@ -33,7 +33,7 @@ public class GenerateROC {
 			iCount ++;
 		}
 		//while( (data == null) &&  (iCount < 100 ));
-		while( iCount < 100 );
+		while( ( iCount < 100 ) && ( data == null )  );
 		
 		if ( iCount == 100 ) {
 			System.out.println("getting data from the Input object FAILED");

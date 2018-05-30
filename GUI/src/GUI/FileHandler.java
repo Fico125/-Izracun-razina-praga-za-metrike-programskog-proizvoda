@@ -5,6 +5,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.MathExpression;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.attribute.StringToNominal;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class FileHandler
 {
-    private static int fileCount = 0;
+	private static int fileCount = 0;
     private String fileName;
     static Remove remove;
     private static List<Instance> instanceList = new ArrayList();
@@ -95,6 +96,32 @@ public class FileHandler
             fileCount--;
         }
     }
+    
+    protected static Instances mathExpression(Instances instance) {
+    	Instances newInstance = null;
+        MathExpression mathFilterExpression = new MathExpression();
+        String[] options = new String[4];
+        mathFilterExpression.setIgnoreRange("last");
+        mathFilterExpression.setInvertSelection(true);
+        mathFilterExpression.setIgnoreClass(true);
+        options[0] = "-V";
+        options[1] = "-R";
+        options[2] = "last";
+        options[3] = "-unset-class-temporarily";
+        try {
+			//mathFilterExpression.setExpression("ceil(1-exp(-100*A))");
+        	mathFilterExpression.setExpression("A+(-7.1)");
+			mathFilterExpression.setOptions(options);
+			mathFilterExpression.setInputFormat(instance);
+			newInstance = Filter.useFilter(instance, mathFilterExpression);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return newInstance;
+    }
+    
+    
     // Converting numeric to nominal values
     protected static Instances numericToNominal(Instances instance)
     {
@@ -102,7 +129,7 @@ public class FileHandler
         NumericToNominal convert = new NumericToNominal();
         String[] options = new String[2];
         options[0] = "-R";
-        options[1] = "2";
+        options[1] = "last";
 
         try
         {
