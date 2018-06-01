@@ -64,25 +64,6 @@ public class CrossValidate {
 		
 		double averagecorrect = 0;
 		
-		/*for ( int n = 0; n < fold; n++ )
-		{
-			Evaluation eval = new Evaluation(randData);
-			Instances train = randData.trainCV(fold, n);
-			Instances test = randData.testCV(fold, n);
-			
-			nb.buildClassifier(train);
-			eval.evaluateModel(nb, test);
-			
-			double correct = eval.pctCorrect();
-			
-			averagecorrect = averagecorrect + correct;
-			String intermediateText = "the "+n+"th cross validation:"+eval.toSummaryString();
-			System.out.println(intermediateText);
-			resultText += intermediateText + "\n";
-			LogisticRegression logisticRegressionEngine = new LogisticRegression();
-			logisticRegressionEngine.process(train, test, randData);
-			resultText += logisticRegressionEngine.getOutputText() + "\n";
-		}*/
 		for ( int i = 0; i < fold; i++ )
 		{
 			System.out.println("-------starting " + i + "  cross validation-------");
@@ -97,5 +78,8 @@ public class CrossValidate {
 		String finalText = "the average correction rate of "+fold+" cross validation: "+averagecorrect/fold;
 		System.out.println(finalText);
 		resultText += finalText;
+		
+		pValueCalculation pValCalc = new pValueCalculation();
+		pValCalc.calculatepValue(dataset);
 	}
 }

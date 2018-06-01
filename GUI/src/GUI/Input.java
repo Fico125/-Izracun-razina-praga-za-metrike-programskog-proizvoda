@@ -27,11 +27,12 @@ public class Input {
 
 		String fullFilePath = filepath + "/" + filename;
 		BufferedReader reader = null;
+		
   	  	try {
   	  		
   	  		if(fullFilePath.endsWith(".csv"))
   	  		{
-  	  		CSVLoader loader = new CSVLoader();
+  	  			CSVLoader loader = new CSVLoader();
 	  			loader.setSource(new File(fullFilePath));
 	  			data = loader.getDataSet();//get instances object
   	  		}

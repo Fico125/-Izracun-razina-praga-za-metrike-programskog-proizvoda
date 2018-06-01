@@ -22,6 +22,7 @@ public class FileHandler
     private static ConverterUtils.DataSource source;
     private static Instances data;
     private ArrayList<Attribute> headerAtts = new ArrayList<>();
+    /*
     public FileHandler()
     {
         initializeOptionArray();
@@ -96,7 +97,7 @@ public class FileHandler
             fileCount--;
         }
     }
-    
+    */
     protected static Instances mathExpression(Instances instance) {
     	Instances newInstance = null;
         MathExpression mathFilterExpression = new MathExpression();
