@@ -13,7 +13,26 @@ import weka.core.converters.ArffLoader;
 
 public class LogisticRegression {
 
+	private double beta0;
+	private double beta1;
 	private String outputText = "";
+	
+	public double getBeta0() {
+		return beta0;
+	}
+
+	public void setBeta0(double beta0) {
+		this.beta0 = beta0;
+	}
+
+	public double getBeta1() {
+		return beta1;
+	}
+
+	public void setBeta1(double beta1) {
+		this.beta1 = beta1;
+	}
+
 	public void process(Instances train, Instances test, Instances randData) throws Exception {
 		
 		Instances trainingDataSet = train;
@@ -52,6 +71,8 @@ public class LogisticRegression {
 		outputTextPreparation(value);
 		
 		double[][] koef = ((Logistic) classifier).coefficients();
+		setBeta0(koef[0][0]);
+		setBeta1(koef[1][0]);
 		for(int i = 0; i < koef.length; i++)
 		{
 			System.out.println("koeficijent: " + koef[i][0]);

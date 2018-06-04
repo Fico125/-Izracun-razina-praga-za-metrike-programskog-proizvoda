@@ -8,10 +8,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+
 import javax.swing.JFileChooser;
 
 import org.eclipse.swt.SWT;
 
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
@@ -21,13 +24,12 @@ public class Input {
 	
 	private  Instances data;
 	private  Instances new_data;
-
+	private  HashMap<String, Integer> classNameAndIndex; 
 	
 	public  void readFile(String filename, String filepath) throws Exception {
 
 		String fullFilePath = filepath + "/" + filename;
 		BufferedReader reader = null;
-		
   	  	try {
   	  		
   	  		if(fullFilePath.endsWith(".csv"))
@@ -64,14 +66,13 @@ public class Input {
   	  			currentInstance.setValue(brojZadnjegStupca, 1.0);
   	  		}
   	  	}
-  	  	// ispis broja instanci, odnosno redaka csv datoteke
-  	  	//System.out.println(data.numInstances());
-  	  	// ispis broja atributa,odnosno metrika ilitiga stupaca
-  	  	//System.out.println(data.numAttributes());
-  	  	//Instance currentInstance = data.instance(3);
-  	  	//String value = currentInstance.toString(49);
   	  	
-  	  	//System.out.println(value);
+  	  	System.out.println(data.numInstances());
+  	  	System.out.println(data.numAttributes());
+  	  	Instance currentInstance = data.instance(3);
+  	  	String value = currentInstance.toString(49);
+  	  	
+  	  	System.out.println(value);
   	  	//}
   	  	
   	  	// setting class attribute

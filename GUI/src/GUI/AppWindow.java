@@ -141,6 +141,7 @@ public class AppWindow {
 				CrossValidate learningEngine = new CrossValidate(input);
 				try {
 					learningEngine.CrossVal();
+					learningEngine.printRegressionResults();
 					textCalculation.setText(learningEngine.getResultText());
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
