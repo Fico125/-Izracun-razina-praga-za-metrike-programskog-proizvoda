@@ -108,8 +108,7 @@ public class pValueCalculation {
 		C = M.solve(I, C);
 		
 		
-		System.out.println("Metric name  Estimate\t\tStd. Error\t\tz value\t\tPr(>|z|)");
-		System.out.println("Metric name  Beta_0\t\tBeta_1\t\tp_value\t\tVARL");
+		System.out.println("\tEstimate\t\tStd. Error\tz value\tPr(>|z|)");
 		for(int j = 0; j < m - 1; j++)
 		{
 			ArrayList<Double> resultVector = new ArrayList<Double>();
@@ -141,7 +140,6 @@ public class pValueCalculation {
 		}
 	}
 
-
 	public double calculatepValueBasedOnChiSquareAllInstance(ArrayList<Double> resultFromModel,
 			ArrayList<Double> resultFromSample) {
 		long[] arrayFromModel = new long[resultFromModel.size()];
@@ -160,7 +158,4 @@ public class pValueCalculation {
 		ChiSquareTest t = new ChiSquareTest();
 		return t.chiSquareTest(expected, observed);
 	}
-
-
-
 }

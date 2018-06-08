@@ -1,12 +1,12 @@
 package GUI;
 
 /*
- * Importi æe vam najvjerovatnije davati errore, kliknite link
- * i skinite ovo šta æe vam doæ
+ * Importi ï¿½e vam najvjerovatnije davati errore, kliknite link
+ * i skinite ovo ï¿½ta ï¿½e vam doï¿½
  * http://www.eclipse.org/downloads/download.php?file=/eclipse/downloads/drops4/R-4.3-201306052000/swt-4.3-win32-win32-x86_64.zip
  * 
  * onda slijedite ove upute
- * i samo kad vas pita da uèitate fajl odabarite onaj jar iz tog zipa šta ste skinuli
+ * i samo kad vas pita da uï¿½itate fajl odabarite onaj jar iz tog zipa ï¿½ta ste skinuli
  * http://www.mkyong.com/swt/how-to-import-swt-library-into-eclipse-workspace/
  * 
  * */
@@ -22,6 +22,9 @@ import org.eclipse.swt.events.SelectionEvent;
 
 import java.io.IOException;
 import org.eclipse.swt.widgets.Text;
+
+
+import GUI.GenerateROC;
 import GUI.org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.graphics.Point; 
 
@@ -94,7 +97,6 @@ public class AppWindow {
 					btnDatotekaSpremna.setSelection(true);
 					
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -128,7 +130,6 @@ public class AppWindow {
 				try {
 					System.exit(0);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -140,11 +141,12 @@ public class AppWindow {
 			 if ( input != null ) {
 				CrossValidate learningEngine = new CrossValidate(input);
 				try {
-					learningEngine.CrossVal();
+					learningEngine.crossVal();
 					learningEngine.printRegressionResults();
 					textCalculation.setText(learningEngine.getResultText());
+					DecisionTree decisionTree = new DecisionTree( learningEngine.getTestDataSet(), learningEngine.getRegressionResults());
+					decisionTree.computeDecisionTree();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			 }
@@ -160,7 +162,6 @@ public class AppWindow {
 					try {
 						plotGraph.DrawRocGraph();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}

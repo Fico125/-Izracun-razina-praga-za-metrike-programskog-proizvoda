@@ -17,7 +17,7 @@ import weka.filters.unsupervised.attribute.Remove;
 
 public class CrossValidate {
 	
-	private String resultText = "";
+	private String resultText;
 	private Input input;
 	private double majorityClassPercentage;
 	private Instances data;
@@ -82,58 +82,50 @@ public class CrossValidate {
 	}
 	
 	public void computeMajorityClassPercentage() {
-		int bug_cnt_true = 0, bug_cnt_false = 0;
+		int bugCountTrue = 0; 
+		int bugCountFalse = 0;
 		int numberOfClasses = data.numInstances();
 		int lastColumnNumber = data.numAttributes() - 1;
 		int maxNumber = 0;
 		double pZeroValue = 0;
-		//System.out.println("Broj klasa: " + numberOfClasses);
 		
 		for(int i = 0; i < numberOfClasses; i++)
 		{
 			if(data.instance(i).toString(lastColumnNumber).equals("0"))
 			{
-				bug_cnt_false++;
+				bugCountFalse++;
 			}
 			else
 			{
-				bug_cnt_true++;
+				bugCountTrue++;
 			}
 		}
 		
-		//System.out.println("Broj bugova: " + bug_cnt_true);
-		//System.out.println("Broj ispravnih klasa: " + bug_cnt_false);
 		
-		if(bug_cnt_false > bug_cnt_true)
+		if(bugCountFalse > bugCountTrue)
 		{
-			maxNumber = bug_cnt_false;
+			maxNumber = bugCountFalse;
 		}
 		else
 		{
-			maxNumber = bug_cnt_true;
+			maxNumber = bugCountTrue;
 		}
-		
-		//System.out.println("maxNumber: " + maxNumber);
-		//System.out.println("numberOfClasses: " + numberOfClasses);
 		
 		pZeroValue = ((double) maxNumber / (double) numberOfClasses) * 100; // * 100 da dobijemo postotak
 		
-		//System.out.println("p0 value = " + pZeroValue);
 		majorityClassPercentage = pZeroValue;
 	}
 
 	public String getResultText() {
-		return resultText;
+		return resultText.toString();
 	}
 	
-	public CrossValidate(Input input_) 
+	public CrossValidate(Input inputData) 
 	{
-		input = input_;
+		input = inputData;
 	}
 	
-
-	
-	public void CrossVal() throws Exception{
+	public void crossVal() throws Exception{
 		
 		System.out.println("getting data from the Input object");
 		int iCount = 1;
@@ -144,7 +136,6 @@ public class CrossValidate {
 			data = input.getData();
 			iCount ++;
 		}
-		//while( (data == null) &&  (iCount < 100 ));
 		while( ( iCount < 100 ) && ( data == null )  );
 		
 		if ( iCount == 100 ) {
@@ -156,7 +147,7 @@ public class CrossValidate {
 		computerNumberOfElementsInEachCategory(data);
 		Instances testData = data.testCV(10, 0);
 		setTestDataSet(testData);
-		//System.out.println(data);
+		double[] expectedResult = getExpectedResults( data);
 		for ( int iAttribute = 1; iAttribute < data.numAttributes() - 1;  iAttribute++) {
 			int[] indices = { iAttribute,  data.numAttributes() - 1};
 			InfoGainAttributeEval eval = new InfoGainAttributeEval();
@@ -179,6 +170,7 @@ public class CrossValidate {
 			Random rand = new Random(seed);
 			Instances randData = new Instances(dataset);
 			randData.randomize(rand);
+			randData.stratify(fold);
 			
 			if (randData.classAttribute().isNominal())
 			{
@@ -186,15 +178,15 @@ public class CrossValidate {
 			}
 			
 			double averagecorrect = 0;
-			ArrayList<Double> coeffResults = new ArrayList<Double>();;
+			ArrayList<Double> coeffResults = new ArrayList<Double>();
 			double beta0 = 0;
 			double beta1 = 0;
-			for ( int i = 0; i < fold; i++ )
+			int i = 0;
+			Instances test = randData.testCV(10, i);
+			for ( i = 1; i < fold; i++ )
 			{
 				System.out.println("-------starting " + i + "  cross validation-------");
-				Evaluation evaluation = new Evaluation(randData);
 				Instances train = randData.trainCV(fold, i);
-				Instances test = randData.testCV(fold, i);
 				
 				LogisticRegression logisticRegressionEngine = new LogisticRegression();
 				logisticRegressionEngine.process(train, test, randData);
@@ -209,22 +201,43 @@ public class CrossValidate {
 			pValueCalculation pValCalc = new pValueCalculation();
 			pValCalc.calculatepValue(dataset);
 			double pval = pValCalc.getP_();
-			
-			if ( pval < 0.05 ) {
+			long[] observedResult = getObservedResults(data, iAttribute, beta0, beta1);
+			double errorMetric = getErrorPerMetric( observedResult, expectedResult);
+			if ( errorMetric < ( 1 - majorityClassPercentage / 100 ) ) {
 				beta0 = beta0/fold;
 				beta1 = beta1/fold;
 				coeffResults.add(beta0);
 				coeffResults.add(beta1);
 				coeffResults.add(pval);
-				double varlThreshold = (1/beta1) * (Math.log((majorityClassPercentage/100)/(1-majorityClassPercentage/100)) - beta0);
+				coeffResults.add(errorMetric);
+				double varlThreshold = 0.0;
+				if ( beta1 != 0 ) {
+					varlThreshold = (1/beta1) * (Math.log((majorityClassPercentage/100)/(1-majorityClassPercentage/100)) - beta0);
+				}
 				coeffResults.add(varlThreshold);
-				regressionResults.put(data.attribute(iAttribute).name(), coeffResults);
+				regressionResults.put(data.attribute(iAttribute).name(), coeffResults);	
 			}
-			
-			//double pval = pValCalc.calculatepValueBasedOnChiSquare(getExpectedResults(data), getObservedResults(data, iAttribute,  beta0, beta1));
-			//double pval = pValCalc.calculatepValueBasedOnChiSquare(getExpectedResultsOnesAndZeros(data), getObservedResultsOnesAndZeros(data, iAttribute,  beta0, beta1));
-			//coeffResults.add(pval);
 		}
+	}
+	
+	public Instances getTestDataSet(Instances randData) {
+		return randData.testCV(10,0);
+	}
+	
+	private double getErrorPerMetric(long[] observedResult, double[] expectedResult) {
+		double result = 0.0;
+		
+		for(int i = 0; i < observedResult.length; i++)
+		{
+			if(observedResult[i] != expectedResult[i])
+			{
+				result++;
+			}
+		}
+		
+		result /= observedResult.length;
+		
+		return result;
 	}
 	
 	
@@ -239,36 +252,15 @@ public class CrossValidate {
 		return result;
 	}
 
-	private long[] getObservedResults(Instances dataset, int iAttribute, double a, double b) {
-		long[] result = new long[dataset.numInstances()];
-		long sum = 0;
-		for ( int i = 0; i < dataset.numInstances(); i++) {
-			result[i] = (long) sigmoid(dataset.instance(i).value(iAttribute), a, b);
+	private long[] getObservedResults(Instances data, int iAttribute, double a, double b) { 
+		System.out.println("iAttribute = " + iAttribute);
+		long[] result = new long[data.numInstances()];
+		for ( int i = 0; i < data.numInstances(); i++) {
+			result[i] = (long) sigmoid(data.instance(i).value(iAttribute), a, b);
 			if (result[i] == 0) {
 				result[i] = 1;
 			}else result[i] = 2;
 		}
-		return result;
-	}
-	
-	private long[] getObservedResultsOnesAndZeros(Instances dataset, int iAttribute, double a, double b) {
-		long[] result = new long[2];
-		long sumOnes = 0;
-		for ( int i = 0; i < dataset.numInstances(); i++) {
-			long modelResult = (long) sigmoid(dataset.instance(i).value(iAttribute), a, b);
-			if (modelResult == 1) {
-				sumOnes++;
-			}
-		}
-		result[0] = dataset.numInstances() - sumOnes;
-		result[1] = sumOnes;
-		return result;
-	}
-	
-	private double[] getExpectedResultsOnesAndZeros(Instances dataset) {
-		double[] result = new double[2];
-		result[1] = totalNumberOfOne;
-		result[0] = dataset.numInstances() - totalNumberOfOne;
 		return result;
 	}
 	
