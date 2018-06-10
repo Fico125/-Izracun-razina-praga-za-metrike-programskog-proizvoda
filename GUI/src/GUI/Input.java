@@ -67,8 +67,13 @@ public class Input {
   	  		}
   	  	}
   	  	
+  	  	System.out.println(data.numInstances());
+  	  	System.out.println(data.numAttributes());
   	  	Instance currentInstance = data.instance(3);
   	  	String value = currentInstance.toString(49);
+  	  	
+  	  	System.out.println(value);
+  	  	//}
   	  	
   	  	// setting class attribute
   	  	data.setClassIndex(data.numAttributes() - 1);
@@ -81,6 +86,9 @@ public class Input {
 
 	public  Instances getData() {
 		return new_data;
-	}	
+	}
+
+
+		
 }
 

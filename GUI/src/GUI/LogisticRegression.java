@@ -16,7 +16,12 @@ public class LogisticRegression {
 	private double beta0;
 	private double beta1;
 	private String outputText = "";
+	private Classifier classifier;
 	
+	public Classifier getClassifier() {
+		return classifier;
+	}
+
 	public double getBeta0() {
 		return beta0;
 	}
@@ -38,7 +43,7 @@ public class LogisticRegression {
 		Instances trainingDataSet = train;
 		Instances testingDataSet = test;
 		/** Classifier here is Linear Regression */
-		Classifier classifier = new weka.classifiers.functions.Logistic();
+		classifier = new weka.classifiers.functions.Logistic();
 		
 		
 		/** */
@@ -56,8 +61,8 @@ public class LogisticRegression {
 		outputTextPreparation("** Linear Regression Evaluation with Datasets **");
 		System.out.println(eval.toSummaryString());
 		outputTextPreparation(eval.toSummaryString());
-		System.out.print(" the expression for the input data as per alogorithm is ");
-		outputTextPreparation(" the expression for the input data as per alogorithm is ");
+		System.out.print(" the expression for the input data as per algorithm is ");
+		outputTextPreparation(" the expression for the input data as per algorithm is ");
 		System.out.println(classifier);
 		outputTextPreparation(classifier);
 
@@ -80,7 +85,7 @@ public class LogisticRegression {
 		}
 		
 		System.out.println("*************************************************************************");
-		outputTextPreparation("*************************************************************************");
+		outputTextPreparation("*******************************************************************");
 	}
 	
 	private void outputTextPreparation( Object text) {

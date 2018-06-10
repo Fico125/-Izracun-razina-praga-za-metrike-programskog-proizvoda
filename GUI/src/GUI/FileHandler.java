@@ -1,28 +1,26 @@
 package GUI;
 
-import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.MathExpression;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.attribute.StringToNominal;
+import weka.filters.unsupervised.attribute.MathExpression;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileHandler
 {
-	private static int fileCount = 0;
+    private static int fileCount = 0;
     private String fileName;
     static Remove remove;
-    private static List<Instance> instanceList = new ArrayList();
+    private static List<Instance> instanceList = new ArrayList<Instance>();
     private static ConverterUtils.DataSource source;
     private static Instances data;
-    private ArrayList<Attribute> headerAtts = new ArrayList<>();
-    /*
+
     public FileHandler()
     {
         initializeOptionArray();
@@ -46,19 +44,15 @@ public class FileHandler
         data = Filter.useFilter(data, remove);
         data = numericToNominal(data);
         data.setClassIndex(data.numAttributes() - 1);
-        createAttributeArray();
+
         for (int i = 0; i < data.numInstances(); i++) {
             instanceList.add(data.get(i));
         }
         System.out.println("No. of instances: " + instanceList.size());
-        //System.out.println(instanceList.get(0).attribute(0).value());
         fileCount++;
     }
     
-    private static void createAttributeArray()
-    {
-        //data.enumerateAttributes()
-    }
+ 
     public int getFileCount()
     {
         return this.fileCount;
@@ -97,7 +91,7 @@ public class FileHandler
             fileCount--;
         }
     }
-    */
+    
     protected static Instances mathExpression(Instances instance) {
     	Instances newInstance = null;
         MathExpression mathFilterExpression = new MathExpression();
@@ -110,7 +104,6 @@ public class FileHandler
         options[2] = "last";
         options[3] = "-unset-class-temporarily";
         try {
-			//mathFilterExpression.setExpression("ceil(1-exp(-100*A))");
         	mathFilterExpression.setExpression("A+(-7.1)");
 			mathFilterExpression.setOptions(options);
 			mathFilterExpression.setInputFormat(instance);
@@ -141,20 +134,6 @@ public class FileHandler
         {
             e.printStackTrace();
         }
-        /*
-        //  Only for debugging purposes
-        System.out.println("Before");
-        for(int i=0; i<2; i=i+1)
-        {
-            //System.out.println("String? "+instance.attribute(i).isString());
-            System.out.println(instance.attribute(i).type());
-        }
-        System.out.println("After");
-        for(int i=0; i<2; i=i+1)
-        {
-            //System.out.println("Nominal? "+newInstance.attribute(i).isNominal());
-            System.out.println(newInstance.attribute(i).type());
-        }*/
 
         return newInstance;
     }
