@@ -1,14 +1,12 @@
 package GUI;
 
 /*
- * Importi �e vam najvjerovatnije davati errore, kliknite link
- * i skinite ovo �ta �e vam do�
+ * Importi ce davati errore, kliknite link ispod i skinite 
  * http://www.eclipse.org/downloads/download.php?file=/eclipse/downloads/drops4/R-4.3-201306052000/swt-4.3-win32-win32-x86_64.zip
  * 
  * onda slijedite ove upute
- * i samo kad vas pita da u�itate fajl odabarite onaj jar iz tog zipa �ta ste skinuli
+ * i samo kad vas pita da ucitate fajl odabarite onaj jar iz tog zipa koji ste skinuli
  * http://www.mkyong.com/swt/how-to-import-swt-library-into-eclipse-workspace/
- * 
  * */
 
 import org.eclipse.swt.widgets.Display;
@@ -47,10 +45,6 @@ public class AppWindow {
 	private Button btnClose;
 	private Table tableModelResults;
 
-	/**
-	 * Launch the application.
-	 * @param args
-	 */
 	public static void main(String[] args) throws IOException {
 		try {
 			AppWindow window = new AppWindow();
@@ -91,6 +85,7 @@ public class AppWindow {
 		btnDatotekaSpremna.setBounds(10, 43, 124, 18);
 		btnDatotekaSpremna.setText("Datoteka spremna");
 		btnDatotekaSpremna.setEnabled(false);
+		
 		ucitaj.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -199,9 +194,11 @@ public class AppWindow {
 				    	item.setText(rowText);
 				    	iTableRow++;
 				    }
+				    
 					DecisionTree decisionTree = new DecisionTree( learningEngine.getTestDataSet(), learningEngine.getRegressionResults());
 					decisionTree.computeDecisionTree();
 					scoringText.setText(decisionTree.getResultText());
+					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -222,19 +219,6 @@ public class AppWindow {
 					}
 				}
 			}
-		});
-		
-		Composite composite = new Composite(shlZdravapp, SWT.EMBEDDED);
-		composite.setBounds(613, 9, 558, 541);
-		
-		//Frame frame = SWT_AWT.new_Frame(composite);
-		//ks = new Ksustav(40, 450);
-		//frame.add(ks);
-		
-		//JRootPane rootPane = new JRootPane();
-		//ks.add(rootPane);
-		
-
-	    
+		});   
 	}
 }

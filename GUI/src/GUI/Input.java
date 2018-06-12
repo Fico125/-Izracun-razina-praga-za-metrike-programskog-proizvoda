@@ -20,6 +20,11 @@ import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 
+/*
+ * Klasa za učitavanje .csv i .arff podataka, odnosno početnih podataka
+ * koje će model koristiti za cross validaciju.
+ * */
+
 public class Input {
 	
 	private  Instances data;
@@ -32,8 +37,7 @@ public class Input {
 		BufferedReader reader = null;
   	  	try {
   	  		
-  	  		if(fullFilePath.endsWith(".csv"))
-  	  		{
+  	  		if(fullFilePath.endsWith(".csv")) {
   	  			CSVLoader loader = new CSVLoader();
 	  			loader.setSource(new File(fullFilePath));
 	  			data = loader.getDataSet();//get instances object
@@ -42,6 +46,7 @@ public class Input {
   	  		else
   	  		{
   	  			reader = new BufferedReader(new FileReader(filepath + "/" + filename));
+  	  			
   	  			try {
   	  				data = new Instances(reader);
   	  			} catch (IOException e) {
@@ -59,36 +64,26 @@ public class Input {
   	  	}
 		
   	  int brojZadnjegStupca = data.numAttributes() - 1;
-  	  	for ( int i = 0; i < data.numInstances(); i++) {
-  	  		Instance currentInstance = data.instance(i);
-  	  		int brojBugova = Integer.parseInt( currentInstance.toString(brojZadnjegStupca) );
-  	  		if ( brojBugova != 0 ) {
-  	  			currentInstance.setValue(brojZadnjegStupca, 1.0);
-  	  		}
-  	  	}
-  	  	
-  	  	//System.out.println(data.numInstances());
-  	  	//System.out.println(data.numAttributes());
-  	  	//Instance currentInstance = data.instance(3);
-  	  	//String value = currentInstance.toString(49);
-  	  	
-  	  	//System.out.println(value);
-  	  	//}
+  	  
+  	  /* Pretvaranje broja bugova u vrijednosti 0/1 */
+  	  for ( int i = 0; i < data.numInstances(); i++) {
+  		  
+  		  Instance currentInstance = data.instance(i);
+  		  int brojBugova = Integer.parseInt( currentInstance.toString(brojZadnjegStupca) );
+  		  if ( brojBugova != 0 ) {
+  			  currentInstance.setValue(brojZadnjegStupca, 1.0);
+  		  }
+  	  }
   	  	
   	  	// setting class attribute
   	  	data.setClassIndex(data.numAttributes() - 1);
 		//System.out.println(data);
   	  	
   	  	new_data = FileHandler.numericToNominal(data);
-  	  
       }
-	
 
 	public  Instances getData() {
 		return new_data;
-	}
-
-
-		
+	}	
 }
 

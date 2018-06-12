@@ -11,6 +11,12 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
+/*
+ * Cilj klase je na osnovu logistièke regresije,metode strojnog uèenja
+ * dati koeficijente beta0, beta1 korištene u sigmoidi i na osnovu njih
+ * cemo primijeniti Bender metodu
+ * */
+
 public class LogisticRegression {
 
 	private double beta0;
@@ -42,14 +48,10 @@ public class LogisticRegression {
 		
 		Instances trainingDataSet = train;
 		Instances testingDataSet = test;
-		/** Classifier here is Linear Regression */
+		/** Classifier here is Logistic Regression */
 		classifier = new weka.classifiers.functions.Logistic();
 		
-		
-		/** */
 		classifier.buildClassifier(trainingDataSet);
-	    
-		
 		/**
 		 * train the algorithm with the training data and evaluate the
 		 * algorithm with testing data

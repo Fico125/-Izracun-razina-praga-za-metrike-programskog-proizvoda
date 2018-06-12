@@ -14,6 +14,10 @@ import weka.filters.Filter;
 import weka.filters.supervised.attribute.AttributeSelection;
 import weka.filters.unsupervised.attribute.Remove;
 
+/*
+ * Cilj klase jest izraditi cross validaciju i koristi klasu LogisticRegression
+ * koja obuhvaæa model logistièke regresije koji je potreban zbog klasifikacije.
+ * */
 
 public class CrossValidate {
 	
@@ -21,12 +25,14 @@ public class CrossValidate {
 	private Input input;
 	private double majorityClassPercentage;
 	private Instances data;
-	private Instances testDataSet; 
+	private Instances testDataSet;
+	// regressionResults je struktura podataka koja sadrži rezultate cross validacije
 	private Map<String, ArrayList<Double>> regressionResults = new HashMap<String, ArrayList<Double>>();
-
+	
 	public void printRegressionResults() {
 		int j = 0;
 		for ( String metric : regressionResults.keySet()) {
+			
 			j++;
 			ArrayList<Double> coefficients = regressionResults.get(metric);
 			System.out.print(j + " : " + metric + " ");
@@ -66,6 +72,8 @@ public class CrossValidate {
 		return resultText.toString();
 	}
 	
+	/* Metoda za izraèun p(0), odnosno postotka veæinske klase(0,1) koja je potrebna
+	 * za izraèun VARL (Bender) metode */
 	public void computeMajorityClassPercentage(Instances data) {
 		int bugCountTrue = 0; 
 		int bugCountFalse = 0;
@@ -76,23 +84,19 @@ public class CrossValidate {
 		
 		for(int i = 0; i < numberOfClasses; i++)
 		{
-			if(data.instance(i).toString(lastColumnNumber).equals("0"))
-			{
+			if(data.instance(i).toString(lastColumnNumber).equals("0")) {
 				bugCountFalse++;
 			}
-			else
-			{
+			else {
 				bugCountTrue++;
 			}
 		}
 		
 		
-		if(bugCountFalse > bugCountTrue)
-		{
+		if(bugCountFalse > bugCountTrue) {
 			maxNumber = bugCountFalse;
 		}
-		else
-		{
+		else {
 			maxNumber = bugCountTrue;
 		}
 		
@@ -125,15 +129,21 @@ public class CrossValidate {
 			System.out.println("data for cross validation read");
 			computeMajorityClassPercentage(data);
 		}
+		
 		Instances testData = data.testCV(10, 0); //ovdje uzimamo prvih 240 klasa za kasnije izracunavati njihov score
 		setTestDataSet(testData);
 		System.out.println("Total number of attributes : " + data.numAttributes() );
 		String rejectedMetrics = "List of rejected metrics :";
+		
+		/* Sadržaj for petlje radi sljedeæe:
+		 * za svaku metriku, odnosno attribute vrši cross validaciju */
 		for ( int iAttribute = 1; iAttribute < data.numAttributes() - 1;  iAttribute++) {
+			
 			System.out.println("validation of attribute : " + data.attribute(iAttribute).name() ); 
 			/* Pocinjemo prvo odvajati od pocetnog seta podataka metriku koja nas zanima (attribute)
 			 * tako da imamo dataset koji ima samo 2 stupca : metrika i bug_cnt*/
 			int[] indices = { iAttribute,  data.numAttributes() - 1};
+			
 			InfoGainAttributeEval eval = new InfoGainAttributeEval();
 		    Ranker search = new Ranker();
 			AttributeSelection attributeSelect = new AttributeSelection();
@@ -159,21 +169,24 @@ public class CrossValidate {
 			randData.randomize(rand);
 			randData.stratify(fold);
 			
-			if (randData.classAttribute().isNominal())
-			{
+			if (randData.classAttribute().isNominal()) {
 				randData.stratify(fold);
 			}
 			
+			//coeffResults sadrži vrijednosti beta0, beta1, pval, errorMetric, varlThreshold
 			ArrayList<Double> coeffResults = new ArrayList<Double>();
 			double beta0 = 0;
 			double beta1 = 0;
 			int i = 0;
+			/* averageCorrect raèuna koliko je puta u svakoj cross validaciji za dan dataset
+			 * od 10% podataka model toèno procijenio da li æe u klasi biti bug ili ne*/
 			double averageCorrect = 0.0;
+			
 			for ( i = 0; i < fold; i++ )
 			{
-				/* Weka uzima 10 puta razliciti test podatak od 240 instanca, i na takav
-				 * nacin ce train dataset i test data set biti razliciti, time se smanjuje
-				 * rizik vezan za overfitting i povecavanje greske pri generalizaciji */
+				/* Weka uzima 10 puta razliciti skup test podatka od 240 instanci, i na takav
+				 * nacin ce train dataset i test dataset biti razliciti, èime se smanjuje
+				 * rizik vezan za overfitting */
 				System.out.println("-------starting " + i + "  cross validation-------");
 				resultText += "----------------- starting " + i + "  cross validation-----------------\n";
 				Instances train = randData.trainCV(fold, i); // 2400 - 240 podataka = 90%
@@ -182,7 +195,7 @@ public class CrossValidate {
 				Evaluation evaluation = new Evaluation(randData);
 				
 				LogisticRegression logisticRegressionEngine = new LogisticRegression();
-				logisticRegressionEngine.process(train, test, randData);
+				logisticRegressionEngine.process(train, test, randData); // model uèi s danim podacima
 				
 				evaluation.evaluateModel(logisticRegressionEngine.getClassifier(), test);
 				double correct = evaluation.correct();
@@ -190,7 +203,7 @@ public class CrossValidate {
 				/* Izracun greske tokom ucenja preko i-tog folda, gdje se Weka bazira na 
 				 * koliko je tocan model bio tokom primjene na test podacima  */
 				averageCorrect += correct / ( incorrect + correct );
-				/* beta0 (intercept) i beta1 su koeficijenti u sigmoidi */
+				/* beta0 (intercept) i beta1 su koeficijenti u sigmoidi u logistièkoj regresiji */
 				beta0 += logisticRegressionEngine.getBeta0();
 				beta1 += logisticRegressionEngine.getBeta1();
 
@@ -204,14 +217,15 @@ public class CrossValidate {
 			pValueCalculation pValCalc = new pValueCalculation();
 			pValCalc.calculatepValue(dataset);
 			double pval = pValCalc.getP_();
-			/* greska metrike je 100 posto manje prosijek postotka tocnih klasifikacija u test podacima 
+			/* greska metrike je 100 posto manje prosjek postotka tocnih klasifikacija u test podacima 
 			   kojih smo dobili prije tokom ucenja */
 			double errorMetric = 1 - averageCorrect; 
-			if ( errorMetric < ( 1 - majorityClassPercentage / 100 ) ) { 
-				/* uzimamo najnizi postotak od 1 ili 0 u bug_cnt, da budemo konzervativniji
+			double minorityClassPercentage = 1 - majorityClassPercentage / 100;
+			
+			if ( errorMetric < minorityClassPercentage ) { 
+				/* za svaku metriku uzimamo najnizi postotak od 1 ili 0 u bug_cnt,
 				 * na ovakav nacin filtiramo sve pre-optimisticne i pre-pesimisticne metrike
-				 * koje bi dale za bilo koju klasu stalno 0 ili 1 bez obzira na vrijednost 
-				 * metrike!*/
+				 * koje bi dale za bilo koju klasu stalno 0 ili 1 bez obzira na vrijednost metrike!*/
 				beta0 = beta0/fold;
 				beta1 = beta1/fold;
 				coeffResults.add(beta0); 

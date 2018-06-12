@@ -26,6 +26,12 @@ import org.apache.commons.math3.stat.inference.ChiSquareTest;
  * http://commons.apache.org/proper/commons-math/download_math.cgi  ( skinite commons-math3-3.6.1-bin.zip, odmah na vrhu je )
  * */
 
+/*
+ * Klasa pValueCalculation nije korištena zbog toga što nismo uspjeli dovoljno testirati
+ * je li pValue koji dobivamo toèan ili ne. Ostavljena je unutar projekta zbog toga
+ * što smatramo da bi mogla biti od velikog znaèaja ukoliko se tema nastavi razraðivati. 
+ * */
+
 public class pValueCalculation {
 	
 	/* Code that computes the p-values for all coefficients of a logistic regression model */
@@ -48,6 +54,7 @@ public class pValueCalculation {
 		double dx = 1e-3;
 		double x_i = x0;
 		double sum = 0.0;
+		
 		while ( x_i < x ) {
 			sum += gaussian(x_i)* dx;
 			x_i += dx;
@@ -83,15 +90,15 @@ public class pValueCalculation {
 		DenseMatrix X = new DenseMatrix(n, m);
 		UpperSymmDenseMatrix V = new UpperSymmDenseMatrix(n);
 		
-		for(int i = 0; i < n; i++)
-		{
+		for(int i = 0; i < n; i++) {
+			
 			p = classifier.distributionForInstance(data.instance(i))[0];
 			V.set(i, i, p * (1 - p));
 			index = 0;
 			X.set(i, index++, 1.0);
 			
-			for(int j = 0; j < m; j++)
-			{
+			for(int j = 0; j < m; j++) {
+				
 				if(j != data.classIndex())
 				{
 					X.set(i, index++, data.instance(i).value(j));
@@ -109,17 +116,16 @@ public class pValueCalculation {
 		
 		
 		System.out.println("\tEstimate\t\tStd. Error\tz value\tPr(>|z|)");
-		for(int j = 0; j < m - 1; j++)
-		{
+		for(int j = 0; j < m - 1; j++) {
+			
 			ArrayList<Double> resultVector = new ArrayList<Double>();
-			if(j == 0)
-			{
+			if(j == 0) {
 				System.out.print("Interc.");
 			}
-			else
-			{
+			else {
 				System.out.println(data.attribute(j).name());
 			}
+			
 			c = koef[j][0];
 			e = Math.sqrt(C.get(j, j));
 			z = (c / e);
@@ -142,12 +148,15 @@ public class pValueCalculation {
 
 	public double calculatepValueBasedOnChiSquareAllInstance(ArrayList<Double> resultFromModel,
 			ArrayList<Double> resultFromSample) {
+		
 		long[] arrayFromModel = new long[resultFromModel.size()];
 		double[] arrayFromSample = new double[resultFromSample.size()];
 		for (int i = 0; i < resultFromModel.size(); i++) {
+			
 			arrayFromSample[i] = resultFromSample.get(i);
 			arrayFromModel[i] = Double.valueOf(resultFromModel.get(i)).longValue();
 		}
+		
 		ChiSquareTest t = new ChiSquareTest();
         double pval = t.chiSquareTest(arrayFromSample, arrayFromModel);
 		return pval;
