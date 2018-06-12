@@ -67,12 +67,12 @@ public class Input {
   	  		}
   	  	}
   	  	
-  	  	System.out.println(data.numInstances());
-  	  	System.out.println(data.numAttributes());
-  	  	Instance currentInstance = data.instance(3);
-  	  	String value = currentInstance.toString(49);
+  	  	//System.out.println(data.numInstances());
+  	  	//System.out.println(data.numAttributes());
+  	  	//Instance currentInstance = data.instance(3);
+  	  	//String value = currentInstance.toString(49);
   	  	
-  	  	System.out.println(value);
+  	  	//System.out.println(value);
   	  	//}
   	  	
   	  	// setting class attribute
