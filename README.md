@@ -13,3 +13,9 @@ Programski proizvod koristi se na način da se pritisne na gumb „Dodaj Datotek
 - Scoring po klasama 
 
 Pritiskom na gumb „Nacrtaj ROC graf“ korisniku se otvara Weka-ino grafičko sučelje s prikazom grafa te su omogućene razne mogućnosti koje korisnik može pritisnuti kako bi drugačije reprezentirao podatke. Pritiskom na gumb „Zatvori“ programski proizvod se zatvara.
+
+### Sadržaj i opis datoteka unutar repozitorija
+- GUI direktorij - sadrži izvorni kod
+- IzracunRazinaPraga.jar - pokretljiva java datoteka koju je moguće preuzeti te programski proizvod pokrenuti kao desktop aplikaciju
+- ExampleFile.csv - primjer datoteke koju je potrebno učitati za pokretanje izračuna
+- ExternalLibraries.txt - tekstualna datoteka sa linkovima svih vanjskih knjižnica korištenih u projektu
